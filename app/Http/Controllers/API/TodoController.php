@@ -12,17 +12,11 @@ use Illuminate\Database\Eloquent\Builder;
 
 class TodoController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $query = Todo::query()
-        ->when(request('search'), function (Builder $query, $search) {
-            return $query->where('title', 'like', '%' . $search . '%');
-        });
-
+        $query = Todo::query();
     $todos = $query->simplePaginate();
-    if ($request->wantsJson()) {
-        return response()->json($todos, 200);
-    }
+
 
     return view('todos.index', compact('todos'));
         
