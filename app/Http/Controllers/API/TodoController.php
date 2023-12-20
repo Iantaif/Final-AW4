@@ -6,15 +6,26 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TodoRequest;
 use App\Models\Todo;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Database\Eloquent\Builder;
+
 
 class TodoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $todos = Todo::all();
-        return view('todos.index', [
-            'todos' => $todos
-        ]);
+        $query = Todo::query()
+        ->when(request('search'), function (Builder $query, $search) {
+            return $query->where('title', 'like', '%' . $search . '%');
+        });
+
+    $todos = $query->simplePaginate();
+    if ($request->wantsJson()) {
+        return response()->json($todos, 200);
+    }
+
+    return view('todos.index', compact('todos'));
+        
     }
     public function create()
     {
@@ -22,7 +33,7 @@ class TodoController extends Controller
     }
     public function store(TodoRequest $request)
     {
-        // Todo::created($request->all())  ;
+        
         Todo::create([
             'title' => $request->title,
             'description' => $request->description,
