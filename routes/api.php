@@ -19,4 +19,6 @@ use App\Http\Controllers\API\TodoController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('todos/index',[TodoController::class,'index'])->name('todos.index');
+Route::get('/', function () {
+    return view('welcome');
+});
