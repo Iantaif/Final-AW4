@@ -14,11 +14,11 @@ use App\Http\Controllers\API\ApiTodoController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
 Route::prefix('v1')->group(function () {
     Route::apiResource('todos', \App\Http\Controllers\API\ApiTodoController::class);
+    Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+        return $request->user();
+    });
 });
 Route::middleware('guest:sanctum')->group(function () {
     
