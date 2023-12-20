@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\TodoController;
+use App\Http\Controllers\API\ApiTodoController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,7 +18,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::prefix('v1')->group(function () {
-    Route::apiResource('todos', \App\Http\Controllers\API\TodoController::class);
+    Route::apiResource('todos', \App\Http\Controllers\API\ApiTodoController::class);
 });
 Route::middleware('guest:sanctum')->group(function () {
     
