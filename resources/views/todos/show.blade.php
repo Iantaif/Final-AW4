@@ -1,25 +1,14 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+    <div class="flex flex-col ">
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("You're logged in!") }}
-                </div>
-            </div>
-        </div>
+    <div class="flex items-center justify-center ">
+    <div class="text-center">
+        <b class="block mb-1 text-2xl">Your todo</b>
+        <p class="text-gray-800 text-lg dark:text-white">{{ $todo->title }}</p>
+
+        <b class="block mt-4 mb-1 text-2xl">Your description</b>
+        <p class="text-gray-800 text-lg dark:text-white">{{ $todo->description }}</p>
     </div>
-
-    <a href="{{ url()->previous() }}">Go back</a>
-
-    <div>
-        <b>Your todo is:</b> {{ $todo->title }}
-        <br>
-        <b>Your todo description is:</b> {{ $todo->description }}
-    </div>
+</div>
+<a href="{{ url()->previous() }}" class="text-blue-500 text-xl hover:underline self-center	">Go back</a>
 </x-app-layout>
