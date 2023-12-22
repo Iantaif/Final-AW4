@@ -6,20 +6,23 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TodoRequest;
 use App\Models\Todo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB; // Import the DB facade
+
 use Illuminate\Http\Response;
 use Illuminate\Database\Eloquent\Builder;
 
 
 class TodoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $query = Todo::query();
-    $todos = $query->simplePaginate();
-
-
-    return view('todos.index', compact('todos'));
         
+        $query = Todo::query();
+        $todos = $query->simplePaginate();
+
+        
+
+        return view('todos.index', compact('todos'));
     }
     public function create()
     {
@@ -27,7 +30,7 @@ class TodoController extends Controller
     }
     public function store(TodoRequest $request)
     {
-        
+
         Todo::create([
             'title' => $request->title,
             'description' => $request->description,
@@ -95,4 +98,15 @@ class TodoController extends Controller
         $request->session()->flash('alert-success', 'Todos delete success');
         return to_route('todos.index');
     }
+    public function search_data(Request $request){
+        $data = $request->input('search');
+    $todos = Todo::where('title', 'like', '%' . $data . '%')
+    ->orwhere('description', 'like', '%' . $data . '%')
+    ->get();
+
+    return view('todos.index', compact('todos'));
+    
+}
+
+
 }
