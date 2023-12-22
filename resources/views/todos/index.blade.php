@@ -93,7 +93,11 @@
         </table>
         @else
         <h1 class="text-2xl	">No todos are created yet</h1>
+        <h1 class="text-2xl	">Click Search to reload the data</h1>
+        
+
         @endif
+        
 
     </div>
 
