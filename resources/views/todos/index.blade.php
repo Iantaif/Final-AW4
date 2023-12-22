@@ -27,6 +27,14 @@
         Create Todo
     </a>
 </div>
+<div class="flex justify-center items-center py-5">
+    <form action="search_data" method="GET" class="flex items-center">
+        <input type="text" name="search" class="border p-2 rounded-md" placeholder="Search">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2">
+            Search
+        </button>
+    </form>
+</div>
 
 
 
@@ -47,6 +55,11 @@
                     </th>
                 </tr>
             </thead>
+            @if(count($todos) > 0)
+    <!-- Display todos -->
+@else
+    <h1 class="text-2xl">No todos match the search criteria</h1>
+@endif
             @if(count($todos)>0)
             <tbody class="border border-gray-500 ">
                 @foreach ($todos as $todo)
