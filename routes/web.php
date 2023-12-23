@@ -35,7 +35,6 @@ Route::middleware('auth')->group(function () {
     Route::get('todos/{id}/edit', [TodoController::class, 'edit'])->name('todos.edit');
     Route::put('todos/{id}', [TodoController::class, 'update'])->name('todos.update');
     Route::delete('todos/{id}', [TodoController::class, 'destroy'])->name('todos.destroy');
-    Route::get('todos/search_data', [TodoController::class, 'search_data']);
     Route::get('search_data', [TodoController::class, 'search_data']);
 });
 

@@ -16,13 +16,8 @@ class TodoController extends Controller
 {
     public function index(Request $request)
     {
-
-        $query = Todo::query();
-        $todos = $query->simplePaginate();
-
-
-
-        return view('todos.index', compact('todos'));
+        $userTodos = Todo::where('user_id', auth()->id())->get();
+        return view('todos.index', ['todos' => $userTodos]);
     }
     public function create()
     {
@@ -32,6 +27,7 @@ class TodoController extends Controller
     {
 
         Todo::create([
+            'user_id' => auth()->id(),
             'title' => $request->title,
             'description' => $request->description,
             'is_completed' => 0,
