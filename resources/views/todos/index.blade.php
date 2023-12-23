@@ -77,7 +77,7 @@
                         <a class="btn btn-success text-blue-400" href="{{ route('todos.show', $todo->id) }}">View</a>
 
                         <a class="btn-info text-slate-800" href="{{ route('todos.edit', $todo->id) }}">Edit</a>
-                        <form method="post" action="{{ route('todos.destroy') }}">
+                        <form method="post" action="{{ route('todos.destroy', ['id' => $todo->id]) }}">
                             @csrf
                             @method('DELETE')
                             <input type="hidden" name="todo_id" value="{{ $todo->id }}">

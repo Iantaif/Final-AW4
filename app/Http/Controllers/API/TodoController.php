@@ -16,11 +16,11 @@ class TodoController extends Controller
 {
     public function index(Request $request)
     {
-        
+
         $query = Todo::query();
         $todos = $query->simplePaginate();
 
-        
+
 
         return view('todos.index', compact('todos'));
     }
@@ -98,15 +98,13 @@ class TodoController extends Controller
         $request->session()->flash('alert-success', 'Todos delete success');
         return to_route('todos.index');
     }
-    public function search_data(Request $request){
+    public function search_data(Request $request)
+    {
         $data = $request->input('search');
-    $todos = Todo::where('title', 'like', '%' . $data . '%')
-    ->orwhere('description', 'like', '%' . $data . '%')
-    ->get();
+        $todos = Todo::where('title', 'like', '%' . $data . '%')
+            ->orwhere('description', 'like', '%' . $data . '%')
+            ->get();
 
-    return view('todos.index', compact('todos'));
-    
-}
-
-
+        return view('todos.index', compact('todos'));
+    }
 }
