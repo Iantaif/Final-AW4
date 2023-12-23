@@ -28,7 +28,7 @@
             </a>
         </div>
         <div class="flex justify-center items-center py-5">
-            <form action="search_data" method="GET" class="flex items-center">
+            <form action="{{route('todos.index')}}" method="GET" class="flex items-center">
                 <input type="text" name="search" class="border p-2 rounded-md" placeholder="Search">
                 <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2">
                     Search
@@ -70,14 +70,14 @@
                         @if($todo->is_completed == 1)
                         <a class="text-green-500	" href="#">completed</a>
                         @else
-                        <a class="text-rose-700" href="#">incompleted</a>
+                        <a class="text-rose-700" href="#">in completed</a>
                         @endif
                     </td>
                     <td>
                         <a class="btn btn-success text-blue-400" href="{{ route('todos.show', $todo->id) }}">View</a>
 
                         <a class="btn-info text-slate-800" href="{{ route('todos.edit', $todo->id) }}">Edit</a>
-                        <form method="post" action="{{ route('todos.destroy', ['id' => $todo->id]) }}">
+                        <form method="post" action="{{ route('todos.destroy', ['todo' => $todo->id]) }}">
                             @csrf
                             @method('DELETE')
                             <input type="hidden" name="todo_id" value="{{ $todo->id }}">

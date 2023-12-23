@@ -2,105 +2,84 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Todo;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TodoRequest;
-use App\Models\Todo;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB; // Import the DB facade
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
 use Illuminate\Database\Eloquent\Builder;
-
 
 class TodoController extends Controller
 {
     public function index(Request $request)
     {
-        $userTodos = Todo::where('user_id', auth()->id())->get();
-        return view('todos.index', ['todos' => $userTodos]);
+        $query = auth()->user()->todos()
+        ->when($request->input('search'), function ($query, $search) {
+            $query
+                ->where('title', 'like', '%' . $search . '%')
+                ->orwhere('description', 'like', '%' . $search . '%');
+        });
+
+    $todos = $query->simplePaginate();
+
+    return view('todos.index', compact('todos'));
+
     }
+
     public function create()
     {
         return view('todos.create');
     }
+
     public function store(TodoRequest $request)
     {
 
-        Todo::create([
-            'user_id' => auth()->id(),
-            'title' => $request->title,
-            'description' => $request->description,
-            'is_completed' => 0,
+        Todo::factory()->create($request->validated());
 
-        ]);
         $request->session()->flash('alert-success', 'Todo created Suscessfully');
+
         return to_route('todos.index');
     }
-    public function show($id)
-    {
-        $todo = Todo::find($id);
-        if (!$todo) {
-            request()->session()->flash('error', 'Unable to loacate todos');
 
-            return to_route('todos.index')->withErrors([
-                'error' => 'Unable to look at todos'
-            ]);
-        }
-        return view('todos.show', ['todo' => $todo]);
+    public function show(Todo $todo)
+    {
+        $this->authorize('update', $todo);
+
+        return view('todos.show', compact('todo'));
     }
-    public function edit($id)
-    {
-        $todo = Todo::find($id);
-        if (!$todo) {
-            request()->session()->flash('error', 'Unable to loacate todos');
 
-            return to_route('todos.index')->withErrors([
-                'error' => 'Unable to look at todos'
-            ]);
-        }
-        return view('todos.edit', ['todo' => $todo]);
+    public function edit(Todo $todo)
+    {
+        $this->authorize('update', $todo);
+
+        return view('todos.edit', compact('todo'));
     }
-    public function update(TodoRequest $request)
+
+    public function update(TodoRequest $request, Todo $todo)
     {
-        $todo = Todo::find($request->todo_id);
-        if (!$todo) {
-            request()->session()->flash('error', 'Unable to loacate todos');
 
-            return to_route('todos.index')->withErrors([
-                'error' => 'Unable to updatetodos'
-            ]);
-        }
-        $todo->update([
-            'title' => $request->title,
-            'description' => $request->description,
-            'is_completed' => $request->is_completed,
+        $this->authorize('update', $todo);
 
+        $validatedData = $request->validated();
 
-        ]);
+        $todo->update($validatedData);
+
         $request->session()->flash('alert-info', 'Todos update success');
-        return to_route('todos.index');
-    }
-    public function destroy(Request $request)
-    {
-        $todo = Todo::find($request->todo_id);
-        if (!$todo) {
-            request()->session()->flash('error', 'Unable to loacate todos');
 
-            return to_route('todos.index')->withErrors([
-                'error' => 'Unable to look at todos'
-            ]);
-        }
+        return redirect()->route('todos.index');
+    }
+
+    public function destroy(Request $request, Todo $todo)
+    {
+
+        $this->authorize('update', $todo);
+
         $todo->delete();
+
         $request->session()->flash('alert-success', 'Todos delete success');
+
         return to_route('todos.index');
     }
-    public function search_data(Request $request)
-    {
-        $data = $request->input('search');
-        $todos = Todo::where('title', 'like', '%' . $data . '%')
-            ->orwhere('description', 'like', '%' . $data . '%')
-            ->get();
-
-        return view('todos.index', compact('todos'));
-    }
+   
 }

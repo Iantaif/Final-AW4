@@ -10,7 +10,7 @@
   </div>
   @endif
 
-  <form class="max-w-sm mx-auto" method="post" action="{{ route('todos.update', ['id' => $todo->id]) }}">
+  <form class="max-w-sm mx-auto" method="post" action="{{ route('todos.update', ['todo' => $todo->id]) }}">
     @csrf
     @method('PUT')
 

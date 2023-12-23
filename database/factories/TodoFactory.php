@@ -15,9 +15,10 @@ class TodoFactory extends Factory
     public function definition(): array
     {
         return [
+            'user_id'=> auth()->user(),
             'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
-            'is_completed' => $this->faker->boolean,
+            'is_completed' =>  $this->faker->boolean, 
         ];
     }
 }
