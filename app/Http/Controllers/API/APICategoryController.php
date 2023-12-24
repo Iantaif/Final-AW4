@@ -1,77 +1,52 @@
 <?php
 
-namespace Tests\Feature;
+namespace App\Http\Controllers\API;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\TodoRequest;
+use App\Models\Todo;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Tests\TestCase;
-use App\Models\Category;
 
-class APICategoryControllerTest extends TestCase
+class ApiTodoController extends Controller
 {
-    use RefreshDatabase, WithFaker;
-
-    public function test_can_list_categories()
+    public function index(Request $request)
     {
-        $categories = Category::factory()->count(3)->create();
-
-        $response = $this->getJson('/api/categories');
-
-        $response->assertStatus(Response::HTTP_OK)
-            ->assertJsonStructure([
-                'categories' => [
-                    '*' => ['id', 'name', 'created_at', 'updated_at'],
-                ],
-            ]);
+        $todos = Todo::paginate();
+        return response()->json($todos);
     }
 
-    public function test_can_create_category()
+    public function store(TodoRequest $request)
     {
-        $data = [
-            'name' => $this->faker->word,
-        ];
+        $todo = Todo::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'is_completed' => false, // Assuming is_completed is a boolean field
+        ]);
 
-        $response = $this->postJson('/api/categories', $data);
-
-        $response->assertStatus(Response::HTTP_CREATED)
-            ->assertJson(['category' => $data]);
+        return response()->json($todo, Response::HTTP_CREATED);
     }
 
-    public function test_can_show_category()
+    public function show(Todo $todo)
     {
-        $category = Category::factory()->create();
-
-        $response = $this->getJson("/api/categories/{$category->id}");
-
-        $response->assertStatus(Response::HTTP_OK)
-            ->assertJson(['category' => $category->toArray()]);
+        return response()->json($todo);
     }
 
-    public function test_can_update_category()
+    public function update(TodoRequest $request, Todo $todo)
     {
-        $category = Category::factory()->create();
+        $todo->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'is_completed' => $request->boolean('is_completed'), // Ensure it's a boolean
+        ]);
 
-        $data = [
-            'name' => $this->faker->word,
-        ];
-
-        $response = $this->putJson("/api/categories/{$category->id}", $data);
-
-        $response->assertStatus(Response::HTTP_OK)
-            ->assertJson(['category' => $data]);
-
-        $this->assertDatabaseHas('categories', $data);
+        return response()->json($todo);
     }
 
-    public function test_can_delete_category()
+    public function destroy(Todo $todo)
     {
-        $category = Category::factory()->create();
+        $todo->delete();
 
-        $response = $this->deleteJson("/api/categories/{$category->id}");
-
-        $response->assertStatus(Response::HTTP_NO_CONTENT);
-
-        $this->assertDatabaseMissing('categories', ['id' => $category->id]);
+        return response()->json(['message' => 'Todo deleted successfully']);
     }
 }
