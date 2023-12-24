@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
+
 
 class CategoryController extends Controller
 {
@@ -19,9 +21,11 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required|unique:categories|max:255',
         ]);
+        $user = Auth::user();
 
         $category = Category::create([
             'name' => $request->name,
+            'user_id' => $user->id,
         ]);
 
         return redirect()->route('todos.index')->with('success', 'Category created successfully');
