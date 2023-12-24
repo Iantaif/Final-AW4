@@ -1,45 +1,77 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace Tests\Feature;
 
-use Illuminate\Http\Request;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\Response;
+use Tests\TestCase;
 use App\Models\Category;
-use App\Http\Controllers\Controller;
 
-class APICategoryController extends Controller
+class APICategoryControllerTest extends TestCase
 {
-    public function index()
-    {
-        $categories = Category::all();
+    use RefreshDatabase, WithFaker;
 
-        return response()->json(['categories' => $categories]);
+    public function test_can_list_categories()
+    {
+        $categories = Category::factory()->count(3)->create();
+
+        $response = $this->getJson('/api/categories');
+
+        $response->assertStatus(Response::HTTP_OK)
+            ->assertJsonStructure([
+                'categories' => [
+                    '*' => ['id', 'name', 'created_at', 'updated_at'],
+                ],
+            ]);
     }
 
-    public function store(Request $request)
+    public function test_can_create_category()
     {
+        $data = [
+            'name' => $this->faker->word,
+        ];
 
-        $category = Category::create($request->all());
+        $response = $this->postJson('/api/categories', $data);
 
-        return response()->json(['category' => $category], 201);
+        $response->assertStatus(Response::HTTP_CREATED)
+            ->assertJson(['category' => $data]);
     }
 
-    public function show(Category $category)
+    public function test_can_show_category()
     {
-        return response()->json(['category' => $category]);
+        $category = Category::factory()->create();
+
+        $response = $this->getJson("/api/categories/{$category->id}");
+
+        $response->assertStatus(Response::HTTP_OK)
+            ->assertJson(['category' => $category->toArray()]);
     }
 
-    public function update(Request $request, Category $category)
+    public function test_can_update_category()
     {
+        $category = Category::factory()->create();
 
-        $category->update($request->all());
+        $data = [
+            'name' => $this->faker->word,
+        ];
 
-        return response()->json(['category' => $category]);
+        $response = $this->putJson("/api/categories/{$category->id}", $data);
+
+        $response->assertStatus(Response::HTTP_OK)
+            ->assertJson(['category' => $data]);
+
+        $this->assertDatabaseHas('categories', $data);
     }
 
-    public function destroy(Category $category)
+    public function test_can_delete_category()
     {
-        $category->delete();
+        $category = Category::factory()->create();
 
-        return response()->json(null, 204);
+        $response = $this->deleteJson("/api/categories/{$category->id}");
+
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
+
+        $this->assertDatabaseMissing('categories', ['id' => $category->id]);
     }
 }
