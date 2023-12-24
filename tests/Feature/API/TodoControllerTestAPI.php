@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
-class ApiTodoControllerTest extends TestCase
+class TodoControllerTestAPI extends TestCase
 {
     use RefreshDatabase, WithFaker;
 

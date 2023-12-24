@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Models\Todo;
 use App\Models\Category;
-
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TodoRequest;
 use Illuminate\Http\Request;
@@ -51,7 +51,12 @@ class TodoController extends Controller
         $request->validate([
             'title' => 'required',
             'description' => 'required',
-            'category_id' => 'required|exists:categories,id,user_id,' . $user_id,
+            'category_id' =>  [
+                'nullable',
+                Rule::exists('categories', 'id')->where(function ($query) use ($user_id) {
+                    $query->where('user_id', $user_id);
+                }),
+            ],
         ]);
 
         $validatedData = $request->validated();

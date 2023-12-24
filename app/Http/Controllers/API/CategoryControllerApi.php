@@ -8,7 +8,7 @@ use App\Models\Todo;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class ApiTodoController extends Controller
+class CategoryControllerApi extends Controller
 {
     public function index(Request $request)
     {

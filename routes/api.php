@@ -6,6 +6,8 @@ use App\Http\Controllers\API\ApiTodoController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\API\Apic;
+use App\Http\Controllers\API\CategoryControllerApi;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -18,15 +20,19 @@ use App\Http\Controllers\API\Apic;
 */
 
 Route::prefix('v1')->group(function () {
-    Route::apiResource('todos', \App\Http\Controllers\API\ApiTodoController::class);
-    Route::apiResource('categories', \App\Http\Controllers\API\ApiTodoController::class);
     Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         return $request->user();
     });
+    Route::apiResource('todos', \App\Http\Controllers\API\TodoControllerApi::class);
+    Route::apiResource('categories', \App\Http\Controllers\API\TodoControllerApi::class);
+
 });
+
+
+
 Route::middleware('guest:sanctum')->group(function () {
-    
 });
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/me', [AuthController::class, 'me'])->middleware('auth:sanctum');

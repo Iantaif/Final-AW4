@@ -11,7 +11,7 @@ use App\Models\Category;
 
 use Illuminate\Database\Eloquent\Builder;
 
-class ApiTodoController extends Controller
+class TodoControllerApi extends Controller
 {
     public function index(Request $request)
     {

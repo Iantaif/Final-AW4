@@ -7,6 +7,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Tests\TestCase;
+use App\Models\User;
+
 
 class CategoryControllerTest extends TestCase
 {
@@ -14,7 +16,8 @@ class CategoryControllerTest extends TestCase
 
     public function test_can_create_category(): void
     {
-        $user = \App\Models\User::factory()->create();
+        $user = User::factory()->create();
+
 
         $this->actingAs($user);
 
@@ -27,7 +30,8 @@ class CategoryControllerTest extends TestCase
 
     public function test_can_store_category(): void
     {
-        $user = \App\Models\User::factory()->create();
+        $user = User::factory()->create();
+
 
         $this->actingAs($user);
         $data = [
@@ -43,11 +47,11 @@ class CategoryControllerTest extends TestCase
 
     public function test_can_delete_category(): void
     {
-        $user = \App\Models\User::factory()->create();
+        $user = User::factory()->create();
 
         $this->actingAs($user);
-        
-        $category = Category::factory()->create();
+
+        $category = Category::factory()->create(['user_id' => $user->id]);
 
         $response = $this->delete(route('categories.destroy', ['category' => $category->id]));
 
