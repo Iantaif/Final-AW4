@@ -22,9 +22,16 @@
             {{ Session::get('error') }}
         </div>
         @endif
+
+
         <div class="flex justify-center items-center py-5">
             <a href="{{ route('todos.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Create Todo
+            </a>
+        </div>
+        <div class="flex justify-center items-center py-5">
+            <a href="{{ route('categories.create') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                Create Category
             </a>
         </div>
         <div class="flex justify-center items-center py-5">
@@ -35,6 +42,19 @@
                 </button>
             </form>
         </div>
+
+
+        <form action="{{ route('todos.index') }}" method="GET" class="py-5">
+            <label>Filter by Categories:</label>
+            @foreach($categories as $category)
+            <label>
+                <input type="checkbox" name="filter_categories[]" value="{{ $category->name }}" {{ in_array($category->name, (array)request('filter_categories')) ? 'checked' : '' }}>
+                {{ $category->name }}
+            </label>
+            @endforeach
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2">Apply Filter</button>
+        </form>
+
 
 
 
@@ -52,6 +72,9 @@
                     </th>
                     <th scope="col" class="px-6 py-3 border border-gray-500">
                         Action
+                    </th>
+                    <th scope="col" class="px-6 py-3 border border-gray-500">
+                        Category
                     </th>
                 </tr>
             </thead>
@@ -73,7 +96,7 @@
                         <a class="text-rose-700" href="#">in completed</a>
                         @endif
                     </td>
-                    <td>
+                    <td class="border border-gray-500">
                         <a class="btn btn-success text-blue-400" href="{{ route('todos.show', $todo->id) }}">View</a>
 
                         <a class="btn-info text-slate-800" href="{{ route('todos.edit', $todo->id) }}">Edit</a>
@@ -84,7 +107,9 @@
                             <input type="submit" class="btn-danger text-rose-500" value="Delete">
                         </form>
 
-                    </td>
+                    </td class="border border-gray-500">
+
+                    <td> {{ $todo->category ? $todo->category->name : 'Uncategorized' }}</td>
                 </tr>
 
                 @endforeach

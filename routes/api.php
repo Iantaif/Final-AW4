@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\ApiTodoController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\API\Apic;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,7 @@ use App\Http\Controllers\AuthController;
 
 Route::prefix('v1')->group(function () {
     Route::apiResource('todos', \App\Http\Controllers\API\ApiTodoController::class);
+    Route::apiResource('categories', \App\Http\Controllers\API\ApiTodoController::class);
     Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         return $request->user();
     });

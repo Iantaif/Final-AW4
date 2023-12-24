@@ -27,38 +27,38 @@ class TodoTest extends TestCase
 
         $response->assertRedirect(route('todos.index'));
 
-        // Additional assertions to check if data is stored in the database
         $this->assertDatabaseHas('todos', $data);
     }
     public function test_can_delete_a_todo()
     {
-        $todo = Todo::create([
-            'title' => $this->faker->sentence,
-            'description' => $this->faker->paragraph,
-            'is_completed' => $this->faker->boolean,
-        ]);
+        $user = \App\Models\User::factory()->create();
 
-        $response = $this->delete(route('todos.destroy', ['id' => $todo->id]));
+        $this->actingAs($user);
+
+        $todo = Todo::factory()->create();
+
+        $response = $this->delete(route('todos.destroy', ['todo' => $todo->id]));
 
         $response->assertStatus(Response::HTTP_FOUND);
 
-        // Additional assertions to check if data is deleted from the database
-        $this->assertDatabaseHas('todos', ['id' => $todo->id]);
+        $this->assertDatabaseMissing('todos', ['id' => $todo->id]);
     }
 
     public function test_can_update_a_todo()
     {
+        $user = \App\Models\User::factory()->create();
+        $this->actingAs($user);
+
         $todo = Todo::factory()->create();
 
-        // Make a request to update the Todo item
         $response = $this->put("/todos/{$todo->id}", [
+            'user_id' => $user->id,
             'title' => 'Updated Title',
             'description' => 'Updated Description',
         ]);
 
-        // Assert that the update was successful
         $response->assertRedirect();
-        // database
+
         $this->assertDatabaseHas('todos', ['id' => $todo->id]);
     }
     public function it_can_show_the_create_form()
@@ -66,18 +66,17 @@ class TodoTest extends TestCase
         $response = $this->get(route('todos.create'));
 
         $response->assertStatus(Response::HTTP_OK);
+
         $response->assertViewIs('todos.create');
     }
     public function it_can_show_a_todo()
     {
-        $todo = Todo::create([
-            'title' => $this->faker->sentence,
-            'description' => $this->faker->paragraph,
-            'is_completed' => $this->faker->boolean,
-        ]);
+        $todo = Todo::factory()->create();
 
-        $response = $this->get(route('todos.show', ['id' => $todo->id]));
+        $response = $this->get(route('todos.show', ['todo' => $todo->id]));
 
-        $response->assertStatus(Response::HTTP_FOUND);
+        $response->assertStatus(Response::HTTP_OK);
+        
+        $response->assertViewIs('todos.show');
     }
 }
