@@ -17,11 +17,11 @@ class TodoController extends Controller
     public function index(Request $request)
     {
         $query = auth()->user()->todos()
-        ->when($request->input('search'), function ($query, $search) {
-            $query
-                ->where('title', 'like', '%' . $search . '%')
-                ->orwhere('description', 'like', '%' . $search . '%');
-        });
+            ->when($request->input('search'), function ($query, $search) {
+                $query
+                    ->where('title', 'like', '%' . $search . '%')
+                    ->orwhere('description', 'like', '%' . $search . '%');
+            });
         $categories = Category::all();
         if ($request->input('filter_categories')) {
             $selectedCategories = $request->input('filter_categories');
@@ -30,22 +30,21 @@ class TodoController extends Controller
             });
         }
 
-       
-    $todos = $query->simplePaginate();
 
-    return view('todos.index', compact('todos','categories'));
+        $todos = $query->simplePaginate();
 
+        return view('todos.index', compact('todos', 'categories'));
     }
 
     public function create()
     {
         $categories = Category::all();
-    return view('todos.create', compact('categories'));
+        return view('todos.create', compact('categories'));
     }
 
     public function store(TodoRequest $request)
     {
-        
+
 
         Todo::factory()->create($request->validated());
 
@@ -93,5 +92,4 @@ class TodoController extends Controller
 
         return to_route('todos.index');
     }
-   
 }

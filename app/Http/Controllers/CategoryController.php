@@ -31,7 +31,6 @@ class CategoryController extends Controller
     {
 
 
-        // Xóa category
         $category->delete();
 
         return redirect()->route('todos.index')->with('success', 'Category deleted successfully');
