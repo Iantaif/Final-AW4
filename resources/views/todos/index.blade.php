@@ -94,7 +94,7 @@
                             <a class="text-red-500" href="#">In Completed</a>
                             @endif
                         </td>
-                        <td class="border border-gray-500">
+                        <td class="border border-gray-400  flex justify-around whitespace-nowrap ">
                             <a class="btn btn-success text-blue-400" href="{{ route('todos.show', $todo->id) }}">View</a>
 
                             <a class="btn-info text-slate-800" href="{{ route('todos.edit', $todo->id) }}">Edit</a>
@@ -102,10 +102,10 @@
                                 @csrf
                                 @method('DELETE')
                                 <input type="hidden" name="todo_id" value="{{ $todo->id }}">
-                                <input type="submit" class="btn-danger text-rose-500" value="Delete">
+                                <input type="submit" class="btn-danger text-rose-500 hover:text-red-700" value="Delete">
                             </form>
 
-                        </td class="border border-gray-500">
+                        </td>
 
                         <td> {{ $todo->category ? $todo->category->name : 'Uncategorized' }}</td>
                     </tr>

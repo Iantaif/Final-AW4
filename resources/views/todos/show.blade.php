@@ -1,14 +1,16 @@
 <x-app-layout>
-    <div class="flex flex-col ">
+    <div class="flex flex-col items-center justify-center space-y-6">
 
-        <div class="flex items-center justify-center ">
-            <div class="text-center">
-                <b class="block mb-1 text-2xl">Your todo</b>
-                <p class="text-gray-800 text-lg dark:text-white">{{ $todo->title }}</p>
+        <div class="text-center">
+            <h2 class="mb-1 text-2xl font-bold">Todo Title</h2>
+            <p class="text-lg text-rose-400 hover:text-gray-800 duration-200">{{ $todo->title }}</p>
 
-                <b class="block mt-4 mb-1 text-2xl">Your description</b>
-                <p class="text-gray-800 text-lg dark:text-white">{{ $todo->description }}</p>
-            </div>
+            <h2 class="mt-4 mb-1 text-2xl font-bold">Todo Description</h2>
+            <p class="text-lg text-rose-400 hover:text-gray-800 duration-200">{{ $todo->description }}</p>
         </div>
-        <a href="{{ url()->previous() }}" class="text-blue-500 text-xl hover:underline self-center	">Go back</a>
+
+        <a href="{{ url()->previous() }}" class="text-xl text-blue-500 hover:underline self-center">Go back</a>
+
+    </div>
+
 </x-app-layout>
