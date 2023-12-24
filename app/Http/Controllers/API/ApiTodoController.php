@@ -7,6 +7,8 @@ use App\Http\Requests\TodoRequest;
 use App\Models\Todo;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Models\Category;
+
 use Illuminate\Database\Eloquent\Builder;
 
 class ApiTodoController extends Controller

@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\Todo;
+use App\Models\Category;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TodoRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Response;
 use Illuminate\Database\Eloquent\Builder;
+
+
 
 class TodoController extends Controller
 {
@@ -20,20 +22,30 @@ class TodoController extends Controller
                 ->where('title', 'like', '%' . $search . '%')
                 ->orwhere('description', 'like', '%' . $search . '%');
         });
+        $categories = Category::all();
+        if ($request->input('filter_categories')) {
+            $selectedCategories = $request->input('filter_categories');
+            $query->whereHas('category', function (Builder $query) use ($selectedCategories) {
+                $query->whereIn('name', $selectedCategories);
+            });
+        }
 
+       
     $todos = $query->simplePaginate();
 
-    return view('todos.index', compact('todos'));
+    return view('todos.index', compact('todos','categories'));
 
     }
 
     public function create()
     {
-        return view('todos.create');
+        $categories = Category::all();
+    return view('todos.create', compact('categories'));
     }
 
     public function store(TodoRequest $request)
     {
+        
 
         Todo::factory()->create($request->validated());
 
