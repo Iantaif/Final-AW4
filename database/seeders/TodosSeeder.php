@@ -33,5 +33,21 @@ class TodosSeeder extends Seeder
             'updated_at' => now(),
             'user_id' => 1, 
         ]);
+        DB::table('todos')->insert([
+            'title' => 'Sample Todo ',
+            'description' => 'Another sample todo description.',
+            'is_completed' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+            'user_id' => 1, 
+        ]);
+        DB::table('todos')->insert([
+            'title' => 'Sample Todo 3',
+            'description' => 'Another sample todo description.',
+            'is_completed' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+            'user_id' => 1, 
+        ]);
     }
 }

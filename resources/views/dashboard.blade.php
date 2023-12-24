@@ -1,17 +1,14 @@
 <x-app-layout>
-    <!-- <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
-                </div>
-            </div>
-        </div>
-    </div> -->
+<body class="bg-gray-100 h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded shadow-md text-center">
+        <h1 class="text-3xl font-bold mb-6">Đây là Todos Của Tài</h1>
+        <p class="text-gray-600">Bắt đầu làm việc trên những công việc của bạn ngay bây giờ!</p>
+
+        <h1 class="text-center text-4xl font-bold my-8">
+    <a class="text-black hover:text-blue-600" href="{{ url('/todos') }} " >Nhấn Vào Đây để xem Todos</a>
+</h1>
+    </div>
+</body>
+  
 </x-app-layout>
