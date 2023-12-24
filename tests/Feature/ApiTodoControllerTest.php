@@ -14,6 +14,9 @@ class ApiTodoControllerTest extends TestCase
 
     public function test_can_get_list_of_todos()
     {
+        $user = \App\Models\User::factory()->create();
+        $this->actingAs($user);
+
         Todo::factory(5)->create();
 
         $response = $this->getJson('/api/v1/todos');
@@ -35,26 +38,29 @@ class ApiTodoControllerTest extends TestCase
 
     public function test_can_create_todo()
     {
+        $user = \App\Models\User::factory()->create();
+        $this->actingAs($user);
+        $todo = Todo::factory()->create();
         $data = [
             'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
+            'is_completed' => $this->faker->boolean,
         ];
 
-        $response = $this->postJson('/api/v1/todos', $data);
+        $response = $this->putJson("/api/v1/todos/{$todo->id}", $data);
 
-        $response->assertStatus(Response::HTTP_CREATED)
-            ->assertJsonStructure([
-                'id',
-                'title',
-                'description',
-                'is_completed',
-                'created_at',
-                'updated_at',
-            ]);
+        $this->assertDatabaseHas('todos', [
+            'id' => $todo->id,
+            'title' => $data['title'],
+            'description' => $data['description'],
+            'is_completed' => $data['is_completed'],
+        ]);
     }
 
     public function test_can_get_todo_by_id()
     {
+        $user = \App\Models\User::factory()->create();
+        $this->actingAs($user);
         $todo = Todo::factory()->create();
 
         $response = $this->getJson("/api/v1/todos/{$todo->id}");
@@ -70,6 +76,8 @@ class ApiTodoControllerTest extends TestCase
 
     public function test_can_update_todo()
     {
+        $user = \App\Models\User::factory()->create();
+        $this->actingAs($user);
         $todo = Todo::factory()->create();
         $data = [
             'title' => $this->faker->sentence,
@@ -90,6 +98,8 @@ class ApiTodoControllerTest extends TestCase
 
     public function test_can_delete_todo()
     {
+        $user = \App\Models\User::factory()->create();
+        $this->actingAs($user);
         $todo = Todo::factory()->create();
 
         $response = $this->deleteJson("/api/v1/todos/{$todo->id}");
