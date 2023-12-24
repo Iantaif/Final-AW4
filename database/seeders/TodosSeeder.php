@@ -16,8 +16,7 @@ class TodosSeeder extends Seeder
      */
     public function run(): void
     {
-        // Todo::factory()->count(30)->create();
-        $user = User::first(); // Lấy ra một user từ database
+        $user = User::first(); 
 
         DB::table('todos')->insert([
             'user_id' => $user->id,

@@ -21,19 +21,21 @@
         </div>
         <div class="flex flex-col justify-center items-center pt-10">
             @if ($categories->count() > 0)
-            <p>Existing Categories:</p>
-            <ul>
+            <p class="mb-4 text-lg font-semibold">Existing Categories:</p>
+            <ul class="list-disc">
                 @foreach ($categories as $existingCategory)
-                <li>
-                    {{ $existingCategory->name }}
+                <li class="flex items-center justify-between mb-2">
+                    <span>{{ $existingCategory->name }} : </span>
                     <form action="{{ route('categories.destroy', $existingCategory->id) }}" method="post" style="display:inline;">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded ">Delete</button>
+                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Delete</button>
                     </form>
                 </li>
                 @endforeach
             </ul>
+            @else
+            <p>No existing categories found.</p>
             @endif
         </div>
     </div>

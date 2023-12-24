@@ -16,19 +16,23 @@ class TodoController extends Controller
 {
     public function index(Request $request)
     {
-        $user_id = $request->input('user_id', auth()->id()); 
+        $user_id = $request->input('user_id', auth()->id());
         $selectedCategories = $request->input('filter_categories', []);
-    
+
         $todos = Todo::where('user_id', $user_id)
+            ->when($request->input('search'), function ($query, $search) {
+                $query->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%');
+            })
             ->when($selectedCategories, function ($query) use ($selectedCategories) {
                 $query->whereHas('category', function ($categoryQuery) use ($selectedCategories) {
                     $categoryQuery->whereIn('name', $selectedCategories);
                 });
             })
             ->get();
-    
+
         $categories = Category::where('user_id', $user_id)->get();
-    
+
         return view('todos.index', [
             'todos' => $todos,
             'categories' => $categories,
@@ -44,10 +48,10 @@ class TodoController extends Controller
 
     public function store(TodoRequest $request)
     {
-        
+
 
         $user_id = auth()->id();
-        
+
         $request->validate([
             'title' => 'required',
             'description' => 'required',
@@ -61,11 +65,11 @@ class TodoController extends Controller
 
         $validatedData = $request->validated();
         $validatedData['user_id'] = $user_id;
-    
+
         Todo::factory()->create($validatedData);
-    
+
         $request->session()->flash('alert-success', 'Todo created Successfully');
-    
+
         return to_route('todos.index');
     }
 
