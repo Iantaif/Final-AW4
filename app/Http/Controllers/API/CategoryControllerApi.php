@@ -21,7 +21,7 @@ class ApiTodoController extends Controller
         $todo = Todo::create([
             'title' => $request->title,
             'description' => $request->description,
-            'is_completed' => false, // Assuming is_completed is a boolean field
+            'is_completed' => false, 
         ]);
 
         return response()->json($todo, Response::HTTP_CREATED);
