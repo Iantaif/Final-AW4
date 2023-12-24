@@ -43,7 +43,6 @@
                 </div>
             </div>
 
-
             <form action="{{ route('todos.index') }}" method="GET" class="py-5">
                 <label class="ml-5 text-lg font-bold ">Filter by Categories :</label>
                 @foreach($categories as $category)
@@ -95,14 +94,16 @@
                             @endif
                         </td>
                         <td class="border border-gray-400  flex justify-around whitespace-nowrap ">
-                            <a class="btn btn-success text-blue-400" href="{{ route('todos.show', $todo->id) }}">View</a>
+                            <a class="btn btn-success text-xl hover:text-blue-700 duration-200 text-blue-400" href="{{ route('todos.show', $todo->id) }}"><i class="fa-solid fa-eye"></i></a>
 
-                            <a class="btn-info text-slate-800" href="{{ route('todos.edit', $todo->id) }}">Edit</a>
+                            <a class="btn-info duration-200 text-xl text-slate-800 hover:text-slate-500 " href="{{ route('todos.edit', $todo->id) }}"><i class="fa-solid fa-pen-to-square"></i></a>
                             <form method="post" action="{{ route('todos.destroy', ['todo' => $todo->id]) }}">
                                 @csrf
                                 @method('DELETE')
                                 <input type="hidden" name="todo_id" value="{{ $todo->id }}">
-                                <input type="submit" class="btn-danger text-rose-500 hover:text-red-700" value="Delete">
+                                <button type="submit" class="btn-danger first-letter: text-xl text-rose-500 duration-200  hover:text-red-700">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
                             </form>
 
                         </td>
