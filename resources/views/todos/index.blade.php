@@ -56,9 +56,6 @@
                 <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py- px-4 rounded ml-2">Apply Your Filter</button>
             </form>
 
-
-
-
             <table class="w-full text-sm text-left rtl:text-right text-black dark:text-gray-400 border border-gray-500">
                 <thead class="text-xs text-black uppercase bg-gray-300 dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
                     <tr>
@@ -92,7 +89,7 @@
                         <td class="border border-gray-500"> {{$todo -> description}}</td>
                         <td class="border border-gray-500">
                             @if($todo->is_completed == 1)
-                            <a class="text-green-500	" href="#">completed</a>
+                            <a class="text-green-500	" href="#">Completed </a>
                             @else
                             <a class="text-red-500" href="#">In Completed</a>
                             @endif
