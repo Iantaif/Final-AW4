@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
+    
     public function create()
     {
-        $categories = Category::all();
+        $categories = Category::where('user_id', auth()->id())->get();
+
 
         return view('categories.create', compact('categories'));
     }
@@ -27,6 +29,7 @@ class CategoryController extends Controller
             'name' => $request->name,
             'user_id' => $user->id,
         ]);
+        
 
         return redirect()->route('todos.index')->with('success', 'Category created successfully');
     }
@@ -34,8 +37,11 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
 
+        if ($category->user_id == auth()->id()) {
+            $category->delete();
+            return redirect()->route('todos.index')->with('success', 'Category deleted successfully');
+        }
 
-        $category->delete();
 
         return redirect()->route('todos.index')->with('success', 'Category deleted successfully');
     }

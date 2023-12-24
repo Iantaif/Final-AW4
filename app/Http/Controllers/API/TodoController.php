@@ -16,40 +16,51 @@ class TodoController extends Controller
 {
     public function index(Request $request)
     {
-        $query = auth()->user()->todos()
-            ->when($request->input('search'), function ($query, $search) {
-                $query
-                    ->where('title', 'like', '%' . $search . '%')
-                    ->orwhere('description', 'like', '%' . $search . '%');
-            });
-        $categories = Category::all();
-        if ($request->input('filter_categories')) {
-            $selectedCategories = $request->input('filter_categories');
-            $query->whereHas('category', function (Builder $query) use ($selectedCategories) {
-                $query->whereIn('name', $selectedCategories);
-            });
-        }
-
-
-        $todos = $query->simplePaginate();
-
-        return view('todos.index', compact('todos', 'categories'));
+        $user_id = $request->input('user_id', auth()->id()); 
+        $selectedCategories = $request->input('filter_categories', []);
+    
+        $todos = Todo::where('user_id', $user_id)
+            ->when($selectedCategories, function ($query) use ($selectedCategories) {
+                $query->whereHas('category', function ($categoryQuery) use ($selectedCategories) {
+                    $categoryQuery->whereIn('name', $selectedCategories);
+                });
+            })
+            ->get();
+    
+        $categories = Category::where('user_id', $user_id)->get();
+    
+        return view('todos.index', [
+            'todos' => $todos,
+            'categories' => $categories,
+        ]);
     }
 
     public function create()
     {
-        $categories = Category::all();
+        $categories = Category::where('user_id', auth()->id())->get();
+
         return view('todos.create', compact('categories'));
     }
 
     public function store(TodoRequest $request)
     {
+        
 
+        $user_id = auth()->id();
+        
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'category_id' => 'required|exists:categories,id,user_id,' . $user_id,
+        ]);
 
-        Todo::factory()->create($request->validated());
-
-        $request->session()->flash('alert-success', 'Todo created Suscessfully');
-
+        $validatedData = $request->validated();
+        $validatedData['user_id'] = $user_id;
+    
+        Todo::factory()->create($validatedData);
+    
+        $request->session()->flash('alert-success', 'Todo created Successfully');
+    
         return to_route('todos.index');
     }
 

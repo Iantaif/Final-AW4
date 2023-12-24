@@ -30,6 +30,7 @@ class TodoTest extends TestCase
         $this->assertDatabaseHas('todos', $data);
     }
 
+
     public function test_can_delete_a_todo()
     {
         $user = \App\Models\User::factory()->create();
@@ -44,6 +45,7 @@ class TodoTest extends TestCase
 
         $this->assertDatabaseMissing('todos', ['id' => $todo->id]);
     }
+
 
 
     public function test_can_update_a_todo()
@@ -64,6 +66,7 @@ class TodoTest extends TestCase
         $this->assertDatabaseHas('todos', ['id' => $todo->id]);
     }
 
+
     public function it_can_show_the_create_form()
     {
         $response = $this->get(route('todos.create'));
@@ -72,6 +75,7 @@ class TodoTest extends TestCase
 
         $response->assertViewIs('todos.create');
     }
+
     public function it_can_show_a_todo()
     {
         $todo = Todo::factory()->create();
