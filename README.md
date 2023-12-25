@@ -63,7 +63,9 @@ To get started with this project, follow the steps below:
 
 ## Demo Video
 
-[Link to Demo Video]
+https://youtu.be/qC6Y3kJslBo
+
+https://drive.google.com/drive/folders/1Xr-Idey1QSoKlqhuYvYHm4aRvSpmmtKK?q=parent:1Xr-Idey1QSoKlqhuYvYHm4aRvSpmmtKK
 
 ## Documentation
 
