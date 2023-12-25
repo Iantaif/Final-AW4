@@ -65,7 +65,7 @@ To get started with this project, follow the steps below:
 
 https://youtu.be/qC6Y3kJslBo
 
-https://drive.google.com/drive/folders/1Xr-Idey1QSoKlqhuYvYHm4aRvSpmmtKK?q=parent:1Xr-Idey1QSoKlqhuYvYHm4aRvSpmmtKK
+https://drive.google.com/drive/folders/1Xr-Idey1QSoKlqhuYvYHm4aRvSpmmtKK?usp=sharing
 
 ## Documentation
 
