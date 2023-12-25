@@ -10,11 +10,10 @@ use Illuminate\Support\Facades\Auth;
 class CategoryController extends Controller
 {
     
+    
     public function create()
     {
         $categories = Category::where('user_id', auth()->id())->get();
-
-
         return view('categories.create', compact('categories'));
     }
 

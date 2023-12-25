@@ -2,10 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\ApiTodoController;
-use App\Http\Controllers\API\UserController;
+
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\API\Apic;
 use App\Http\Controllers\API\CategoryControllerApi;
 
 
@@ -19,18 +17,16 @@ use App\Http\Controllers\API\CategoryControllerApi;
 |
 */
 
-Route::prefix('v1')->group(function () {
-    Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-        return $request->user();
-    });
-    Route::apiResource('todos', \App\Http\Controllers\API\TodoControllerApi::class);
-    Route::apiResource('categories', \App\Http\Controllers\API\TodoControllerApi::class);
-
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
 });
 
-
-
-Route::middleware('guest:sanctum')->group(function () {
+Route::prefix('v1')->group(function () {
+    Route::apiResource('categories', CategoryControllerApi::class);
+    Route::apiResource('todos', \App\Http\Controllers\API\TodoControllerApi::class);
+    Route::get('/test', function() {
+        return "Test API";
+      });
 });
 
 Route::post('/register', [AuthController::class, 'register']);

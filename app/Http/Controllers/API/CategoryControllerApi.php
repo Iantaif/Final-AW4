@@ -3,50 +3,79 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\TodoRequest;
-use App\Models\Todo;
+use App\Http\Requests\CategoryRequest;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class CategoryControllerApi extends Controller
 {
+
     public function index(Request $request)
     {
-        $todos = Todo::paginate();
-        return response()->json($todos);
+        $categories = Category::paginate();
+
+        return response()->json($categories);
     }
 
-    public function store(TodoRequest $request)
+    public function store(CategoryRequest $request)
     {
-        $todo = Todo::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'is_completed' => false, 
+        $category = Category::where('name', $request->name)->first();
+
+        if ($category) {
+            $category->update(['user_id' => $request->user_id]);
+
+            return response()->json($category, Response::HTTP_OK);
+        }
+
+        $newCategory = Category::create([
+            'name' => $request->name,
+            'user_id' => $request->user_id
         ]);
 
-        return response()->json($todo, Response::HTTP_CREATED);
+        return response()->json($newCategory, Response::HTTP_CREATED);
     }
 
-    public function show(Todo $todo)
+
+    public function show($id)
     {
-        return response()->json($todo);
+        $category = Category::find($id);
+
+        if (!$category) {
+            return response()->json(['error' => 'Category not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        return response()->json($category);
     }
 
-    public function update(TodoRequest $request, Todo $todo)
+
+    public function update(CategoryRequest $request, $id)
     {
-        $todo->update([
-            'title' => $request->title,
-            'description' => $request->description,
-            'is_completed' => $request->boolean('is_completed'), // Ensure it's a boolean
+        $category = Category::find($id);
+
+
+        if (!$category) {
+            return response()->json(['error' => 'Category not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $category->update([
+            'name' => $request->name
         ]);
 
-        return response()->json($todo);
+        return response()->json($category);
     }
 
-    public function destroy(Todo $todo)
-    {
-        $todo->delete();
 
-        return response()->json(['message' => 'Todo deleted successfully']);
+    public function destroy($id)
+    {
+        $category = Category::find($id);
+
+        if (!$category) {
+            return response()->json(['error' => 'Category not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $category->delete();
+
+        return response()->json(['message' => 'Category deleted']);
     }
 }
