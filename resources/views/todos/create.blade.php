@@ -1,12 +1,12 @@
 <x-app-layout>
-<div class="text-center">
+  <div class="text-center">
     <h1 class="text-4xl font-bold text-blue-500">Create Todo</h1>
-</div>
+  </div>
 
 
   @if ($errors->any())
   <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400">
-    
+
     <ul>
       @foreach ($errors->all() as $error)
       <li>{{ $error }}</li>
@@ -27,7 +27,7 @@
       <label class="block mb-2 text-lg font-large font-medium text-gray-900 dark:text-white">Description</label>
       <textarea class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="description" cols="5" rows="5"></textarea>
     </div>
-  
+
     <div class="mb-3">
       <label class="block mb-2 text-lg font-large font-medium text-gray-900 dark:text-white">Category</label>
       <select name="category_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">

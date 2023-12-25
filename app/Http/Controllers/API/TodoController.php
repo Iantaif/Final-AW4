@@ -86,7 +86,7 @@ class TodoController extends Controller
 
         $categories = Category::where('user_id', auth()->id())->get();
 
-        return view('todos.edit', compact('todo','categories'));
+        return view('todos.edit', compact('todo', 'categories'));
     }
 
     public function update(TodoRequest $request, Todo $todo)
@@ -99,7 +99,7 @@ class TodoController extends Controller
 
         $todo->update($validatedData);
 
-        
+
 
         $request->session()->flash('alert-info', 'Todos update success');
 
