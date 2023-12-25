@@ -25,6 +25,7 @@ class TodoRequest extends FormRequest
             'title' => 'required|string',
             'description' => 'required|string|min:5|max:500',
             'is_completed' => 'boolean',
+            'category_id' => 'required|exists:categories,id',
         ];
     }
 }

@@ -36,6 +36,14 @@
       </select>
     </div>
 
+    <div class="mb-3">
+    <label for="category_id" class="block mb-2 text-sm font-large font-medium text-gray-900 dark:text-white">Category</label>
+    <select name="category_id" id="category_id" class="...">
+        @foreach($categories as $category)
+            <option value="{{ $category->id }}" {{ $todo->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+        @endforeach
+    </select>
+</div>
 
     <button type="submit"
       class="px-6 py-3 transition duration-150 ease-in-out bg-sky-500 hover:bg-sky-200 rounded-full">Submit</button>

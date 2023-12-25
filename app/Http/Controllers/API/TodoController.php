@@ -84,7 +84,9 @@ class TodoController extends Controller
     {
         $this->authorize('update', $todo);
 
-        return view('todos.edit', compact('todo'));
+        $categories = Category::where('user_id', auth()->id())->get();
+
+        return view('todos.edit', compact('todo','categories'));
     }
 
     public function update(TodoRequest $request, Todo $todo)
@@ -94,7 +96,10 @@ class TodoController extends Controller
 
         $validatedData = $request->validated();
 
+
         $todo->update($validatedData);
+
+        
 
         $request->session()->flash('alert-info', 'Todos update success');
 

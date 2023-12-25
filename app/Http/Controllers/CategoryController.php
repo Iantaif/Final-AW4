@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
-    
-    
+
+
     public function create()
     {
         $categories = Category::where('user_id', auth()->id())->get();
@@ -28,7 +28,7 @@ class CategoryController extends Controller
             'name' => $request->name,
             'user_id' => $user->id,
         ]);
-        
+
 
         return redirect()->route('todos.index')->with('success', 'Category created successfully');
     }
@@ -43,5 +43,17 @@ class CategoryController extends Controller
 
 
         return redirect()->route('todos.index')->with('success', 'Category deleted successfully');
+    }
+    public function update(Request $request, Category $category)
+    {
+        $request->validate([
+            'name' => 'required|max:255|unique:categories,name,' . $category->id,
+        ]);
+
+        $category->update([
+            'name' => $request->name,
+        ]);
+
+        return redirect()->route('todos.index')->with('success', 'Category updated successfully');
     }
 }
