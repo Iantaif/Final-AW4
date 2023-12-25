@@ -44,16 +44,5 @@ class CategoryController extends Controller
 
         return redirect()->route('todos.index')->with('success', 'Category deleted successfully');
     }
-    public function update(Request $request, Category $category)
-    {
-        $request->validate([
-            'name' => 'required|max:255|unique:categories,name,' . $category->id,
-        ]);
-
-        $category->update([
-            'name' => $request->name,
-        ]);
-
-        return redirect()->route('todos.index')->with('success', 'Category updated successfully');
-    }
+   
 }

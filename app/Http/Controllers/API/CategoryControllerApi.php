@@ -7,6 +7,7 @@ use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryControllerApi extends Controller
 {
@@ -20,6 +21,7 @@ class CategoryControllerApi extends Controller
 
     public function store(CategoryRequest $request)
     {
+        $this->authorize('store', Category::class);
         $category = Category::where('name', $request->name)->first();
 
         if ($category) {
@@ -47,24 +49,6 @@ class CategoryControllerApi extends Controller
 
         return response()->json($category);
     }
-
-
-    public function update(CategoryRequest $request, $id)
-    {
-        $category = Category::find($id);
-
-
-        if (!$category) {
-            return response()->json(['error' => 'Category not found'], Response::HTTP_NOT_FOUND);
-        }
-
-        $category->update([
-            'name' => $request->name
-        ]);
-
-        return response()->json($category);
-    }
-
 
     public function destroy($id)
     {
